@@ -16,4 +16,4 @@ script:
   - go test -v ./... -race -coverprofile=c.out -covermode=atomic
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - ./cc-test-reporter after-build -t gocov --exit-code $TRAVIS_TEST_RESULT
