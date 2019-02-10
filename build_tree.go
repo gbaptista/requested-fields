@@ -138,11 +138,6 @@ func applyFragments(request string, fragments map[string]string) string {
 		}
 	}
 
-	// TODO: while ... exists, with a max of loops.
-	for i := 5; i > 0; i-- {
-
-	}
-
 	return request
 }
 
