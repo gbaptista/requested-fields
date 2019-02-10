@@ -111,6 +111,20 @@ var graphql_query_d string = `
   }
 }`
 
+var graphql_query_e string = `
+{
+  user(id: 3) {
+    id
+    name
+  }
+
+  custom_user: user(id: 4) {
+    id
+    name
+    age
+  }
+}`
+
 func TestBuildTree(t *testing.T) {
 	expected_tree_a := map[string][]string{
 		"":                                     []string{"search", "search_users"},
@@ -155,4 +169,13 @@ func TestBuildTree(t *testing.T) {
 	generated_tree_d := BuildTree(graphql_query_d)
 
 	assert.Equal(t, expected_tree_d, generated_tree_d)
+
+	expected_tree_e := map[string][]string{
+		"":     []string{"user"},
+		"user": []string{"id", "name", "age"},
+	}
+
+	generated_tree_e := BuildTree(graphql_query_e)
+
+	assert.Equal(t, expected_tree_e, generated_tree_e)
 }
