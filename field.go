@@ -11,39 +11,41 @@ type Field struct {
 	ParentTree []string
 }
 
+// SetCustomName define a custom nome for Field.
 func (field *Field) SetCustomName(name string) {
 	field.CustomName = name
 }
 
-func (field *Field) SetParent(parent_resolver interface{}) {
-	parent_field := FromResolver(parent_resolver)
+// SetParent define the parent resolver of a Feild.
+func (field *Field) SetParent(parentResolver interface{}) {
+	parentField := fromResolver(parentResolver)
 
-	field.Depth = parent_field.Depth + 1
+	field.Depth = parentField.Depth + 1
 
 	field.ParentTree = append(
-		parent_field.ParentTree,
-		NameFromResolver(parent_resolver))
+		parentField.ParentTree,
+		nameFromResolver(parentResolver))
 }
 
-func FromResolver(resolver interface{}) Field {
-	field_value := reflect.ValueOf(resolver).Elem().FieldByName("Field")
+func fromResolver(resolver interface{}) Field {
+	fieldValue := reflect.ValueOf(resolver).Elem().FieldByName("Field")
 
-	return field_value.Interface().(Field)
+	return fieldValue.Interface().(Field)
 }
 
-func NameFromResolver(resolver interface{}) string {
-	field := FromResolver(resolver)
+func nameFromResolver(resolver interface{}) string {
+	field := fromResolver(resolver)
 
-	var field_name string
+	var fieldName string
 
 	if field.CustomName != "" {
-		field_name = field.CustomName
+		fieldName = field.CustomName
 	} else {
-		field_type, _ := reflect.TypeOf(
+		fieldType, _ := reflect.TypeOf(
 			resolver).Elem().FieldByName("Field")
 
-		field_name = fmt.Sprintf("%s", field_type.Tag)
+		fieldName = fmt.Sprintf("%s", fieldType.Tag)
 	}
 
-	return field_name
+	return fieldName
 }

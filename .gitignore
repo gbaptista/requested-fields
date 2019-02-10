@@ -1,4 +1,7 @@
 Gopkg.toml
 Gopkg.lock
 
+cc-test-reporter
+c.out
+
 /vendor
