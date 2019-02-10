@@ -11,12 +11,12 @@ type Field struct {
 	ParentTree []string
 }
 
-// Set a custom nome for Field.
+// SetCustomName define a custom nome for Field.
 func (field *Field) SetCustomName(name string) {
 	field.CustomName = name
 }
 
-// Set the parent resolver of a Feild.
+// SetParent define the parent resolver of a Feild.
 func (field *Field) SetParent(parentResolver interface{}) {
 	parentField := fromResolver(parentResolver)
 
