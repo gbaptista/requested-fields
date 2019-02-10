@@ -26,7 +26,7 @@ Examples of how to use with [graphql-go](https://github.com/graph-gophers/graphq
 Create the query tree and pass it through context:
 
 ```go
-query = `{ user { name } }`
+query := `{ user { name } }`
 
 ctx := context.WithValue(request.Context(),
 		fields.ContextKey, fields.BuildTree(query))
