@@ -41,7 +41,7 @@ func TestRequestedFieldsForProducts(t *testing.T) {
 	products_resolver.Field.SetParent(search_resolver)
 
 	ctx := context.WithValue(context.Background(),
-		"graphqlRequestTree", BuildTree(graphql_query_products))
+		ContextKey, BuildTree(graphql_query_products))
 
 	expected_fields := []string{"edges"}
 	requested_fields := RequestedFor(ctx, products_resolver)
@@ -79,7 +79,7 @@ func TestRequestedFieldsForUser(t *testing.T) {
 	user_resolver.Field.SetParent(query_resolver)
 
 	ctx := context.WithValue(context.Background(),
-		"graphqlRequestTree", BuildTree(graphql_query_user))
+		ContextKey, BuildTree(graphql_query_user))
 
 	expected_fields := []string{"id", "name"}
 	requested_fields := RequestedFor(ctx, user_resolver)
