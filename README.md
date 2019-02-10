@@ -109,6 +109,7 @@ When aliases for the same resource are used at the same level:
   user(id: 3) {
     id
     name
+    birthday
   }
 
   custom_user: user(id: 4) {
@@ -121,5 +122,5 @@ When aliases for the same resource are used at the same level:
 
 The requested fields will be the fields of all equal resources at the same level:
 ```golang
-[]string{"id", "name", "age"}
+[]string{"id", "name", "birthday", "age"}
 ```
