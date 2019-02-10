@@ -2,7 +2,7 @@
 
 A simple library to extract requested fields from a GraphQL request. Supports fragments, aliases and all GraphQL features.
 
-- [Quick guide](#quick-guide)
+- [Quick Guide](#quick-guide)
   - [Query Tree](#query-tree)
   - [Resolvers Field](#resolvers-field)
   - [Requested Fields](#requested-fields)
@@ -11,7 +11,7 @@ A simple library to extract requested fields from a GraphQL request. Supports fr
 - [Complete Demo with Real Requests](#complete-demo-with-real-requests)
 - [Known Issues](#known-issues)
 
-## Quick guide
+## Quick Guide
 
 ```go
 import (
