@@ -1,6 +1,7 @@
 package fields
 
 import (
+	"sort"
 	"strings"
 )
 
@@ -53,11 +54,11 @@ func BuildTree(request string) map[string][]string {
 
 			path := strings.Join(currentTree, ".")
 
-			tree[path] = append(tree[path], field)
+			tree[path] = appendIfMissing(tree[path], field)
 		}
 
 		if levelUpRegex.MatchString(line) {
-			currentTree = append(currentTree, lastField)
+			currentTree = appendIfMissing(currentTree, lastField)
 			currentLevel++
 		} else if levelDownRegex.MatchString(line) {
 			currentTree = currentTree[:len(currentTree)-1]
@@ -106,11 +107,34 @@ func extractAndGroupFragments(request string) map[string]string {
 	return fragments
 }
 
+const fragmentsLimit int = 1000
+
 func applyFragments(request string, fragments map[string]string) string {
-	// TODO: while ... exists, with a max of loops.
-	for i := 5; i > 0; i-- {
-		for name, body := range fragments {
-			request = strings.Replace(request, name, body, -1)
+	var sortedFragments []string
+
+	for name := range fragments {
+		sortedFragments = append(sortedFragments, name)
+	}
+
+	sort.Sort(byLength(sortedFragments))
+
+	continueApplying := true
+
+	replacedFragments := 0
+
+	for continueApplying {
+		if partialFragmentRegex.MatchString(request) {
+			for _, name := range sortedFragments {
+				request = strings.Replace(request, name, fragments[name], -1)
+			}
+
+			replacedFragments++
+
+			if replacedFragments > fragmentsLimit {
+				continueApplying = false
+			}
+		} else {
+			continueApplying = false
 		}
 	}
 
@@ -124,4 +148,13 @@ func removeFragments(request string) string {
 func removeQuery(request string) string {
 	request = queryStartRegex.ReplaceAllString(request, "")
 	return queryEndRegex.ReplaceAllString(request, "")
+}
+
+func appendIfMissing(tree []string, fieldToAppend string) []string {
+	for _, field := range tree {
+		if field == fieldToAppend {
+			return tree
+		}
+	}
+	return append(tree, fieldToAppend)
 }

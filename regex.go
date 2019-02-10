@@ -12,7 +12,8 @@ const (
 	aliasRegexString  = `.*?:`
 	spacesRegexString = `\s{1,}`
 
-	fragmentsRegexString = `(?m)fragment(.|\n)*?}`
+	fragmentsRegexString       = `(?m)fragment(.|\n)*?}`
+	partialFragmentRegexString = `\.\.\.`
 
 	fragmentNameStartRegexString = `(?m)fragment(\s|\n){1,}`
 	fragmentNameEndRegexString   = `(?m)\s{1,}on(.|\n)*`
@@ -34,7 +35,8 @@ var (
 	aliasRegex  = regexp.MustCompile(aliasRegexString)
 	spacesRegex = regexp.MustCompile(spacesRegexString)
 
-	fragmentsRegex = regexp.MustCompile(fragmentsRegexString)
+	fragmentsRegex       = regexp.MustCompile(fragmentsRegexString)
+	partialFragmentRegex = regexp.MustCompile(partialFragmentRegexString)
 
 	fragmentNameStartRegex = regexp.MustCompile(fragmentNameStartRegexString)
 	fragmentNameEndRegex   = regexp.MustCompile(fragmentNameEndRegexString)
