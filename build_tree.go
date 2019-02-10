@@ -112,7 +112,7 @@ const fragmentsLimit int = 1000
 func applyFragments(request string, fragments map[string]string) string {
 	var sortedFragments []string
 
-	for name, _ := range fragments {
+	for name := range fragments {
 		sortedFragments = append(sortedFragments, name)
 	}
 
