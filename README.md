@@ -1,6 +1,6 @@
 # requested-fields [![Build Status](https://travis-ci.org/gbaptista/requested-fields.svg?branch=master)](https://travis-ci.org/gbaptista/requested-fields) [![Maintainability](https://api.codeclimate.com/v1/badges/23ed3e32ab6688c28f6e/maintainability)](https://codeclimate.com/github/gbaptista/requested-fields/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/23ed3e32ab6688c28f6e/test_coverage)](https://codeclimate.com/github/gbaptista/requested-fields/test_coverage)
 
-A simple library to extract requested fields from a GraphQL request. Supports fragments, aliases and all the features of a GraphQL query.
+A simple library to extract requested fields from a GraphQL request. Supports fragments, aliases and all GraphQL features.
 
 - [Quick guide](#quick-guide)
   - [Query Tree](#query-tree)
