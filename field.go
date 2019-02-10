@@ -11,28 +11,30 @@ type Field struct {
 	ParentTree []string
 }
 
+// Set a custom nome for Field.
 func (field *Field) SetCustomName(name string) {
 	field.CustomName = name
 }
 
+// Set the parent resolver of a Feild.
 func (field *Field) SetParent(parentResolver interface{}) {
-	parentField := FromResolver(parentResolver)
+	parentField := fromResolver(parentResolver)
 
 	field.Depth = parentField.Depth + 1
 
 	field.ParentTree = append(
 		parentField.ParentTree,
-		NameFromResolver(parentResolver))
+		nameFromResolver(parentResolver))
 }
 
-func FromResolver(resolver interface{}) Field {
+func fromResolver(resolver interface{}) Field {
 	fieldValue := reflect.ValueOf(resolver).Elem().FieldByName("Field")
 
 	return fieldValue.Interface().(Field)
 }
 
-func NameFromResolver(resolver interface{}) string {
-	field := FromResolver(resolver)
+func nameFromResolver(resolver interface{}) string {
+	field := fromResolver(resolver)
 
 	var fieldName string
 

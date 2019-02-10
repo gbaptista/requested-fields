@@ -4,6 +4,24 @@ import (
 	"strings"
 )
 
+/*
+BuildTree receives an input string with a GraphQL request
+and returns a map with requested fields for each field.
+
+	This request:
+		query {
+		  users {
+		    id
+		    name
+		  }
+		}
+
+	Will generates:
+		:= map[string][]string{
+			"":      []string{"users"},
+			"users": []string{"id", "name"},
+		}
+*/
 func BuildTree(request string) map[string][]string {
 	tree := make(map[string][]string)
 

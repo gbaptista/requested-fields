@@ -36,6 +36,8 @@ func TestField(t *testing.T) {
 	assert.Equal(t, 1, resolver_b.Field.Depth)
 	assert.Equal(t, []string{"a"}, resolver_b.Field.ParentTree)
 
+	assert.Equal(t, []string{"a"}, resolver_b.Field.ParentTree)
+
 	resolver_c := &ResolverC{}
 	resolver_c.Field.SetParent(resolver_b)
 

@@ -5,11 +5,18 @@ import (
 	"strings"
 )
 
-func RequestedForAt(ctx context.Context, resolver interface{}, path_to_append string) []string {
-	tree := ctx.Value("graphql_request_tree").(map[string][]string)
+// RequestedFor returns all requested fields for some Resolver.
+func RequestedFor(ctx context.Context, resolver interface{}) []string {
+	return RequestedForAt(ctx, resolver, "")
+}
 
-	name := NameFromResolver(resolver)
-	field := FromResolver(resolver)
+// RequestedForAt returns all requested fields for
+//some path from a reference Resolver.
+func RequestedForAt(ctx context.Context, resolver interface{}, path_to_append string) []string {
+	tree := ctx.Value("graphqlRequestTree").(map[string][]string)
+
+	name := nameFromResolver(resolver)
+	field := fromResolver(resolver)
 
 	path := append(field.ParentTree, name)
 
@@ -23,8 +30,4 @@ func RequestedForAt(ctx context.Context, resolver interface{}, path_to_append st
 	}
 
 	return tree[pathTree]
-}
-
-func RequestedFor(ctx context.Context, resolver interface{}) []string {
-	return RequestedForAt(ctx, resolver, "")
 }
