@@ -71,7 +71,7 @@ func (userResolver *UserResolver) Address(ctx context.Context) *AddressResolver 
 
 ### Accessing Fields on Deeper Levels
 ```go
-fields.RequestedForAt(ctx, Query, "user.address")
+fields.RequestedForAt(ctx, queryResolver, "user.address")
 fields.RequestedForAt(ctx, userResolver, "address")
 fields.RequestedForAt(ctx, userResolver, "address.country")
 ```
