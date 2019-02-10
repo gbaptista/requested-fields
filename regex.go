@@ -4,22 +4,46 @@ import (
 	"regexp"
 )
 
-var schemaRegex = regexp.MustCompile(`__schema`)
+const (
+	schemaRegexString = `__schema`
 
-var paramsRegex = regexp.MustCompile(`\(.*?\)`)
-var commasRegex = regexp.MustCompile(`,`)
-var aliasRegex = regexp.MustCompile(`.*?:`)
-var spacesRegex = regexp.MustCompile(`\s{1,}`)
+	paramsRegexString = `\(.*?\)`
+	commasRegexString = `,`
+	aliasRegexString  = `.*?:`
+	spacesRegexString = `\s{1,}`
 
-var fragmentsRegex = regexp.MustCompile(`(?m)fragment(.|\n)*?}`)
+	fragmentsRegexString = `(?m)fragment(.|\n)*?}`
 
-var fragmentNameStartRegex = regexp.MustCompile(`(?m)fragment(\s|\n){1,}`)
-var fragmentNameEndRegex = regexp.MustCompile(`(?m)\s{1,}on(.|\n)*`)
-var fragmentBodyStartRegex = regexp.MustCompile(`(?m)(.|\n)*?{`)
-var fragmentBodyEndRegex = regexp.MustCompile(`(?m)}(\s|\n)*\z`)
+	fragmentNameStartRegexString = `(?m)fragment(\s|\n){1,}`
+	fragmentNameEndRegexString   = `(?m)\s{1,}on(.|\n)*`
+	fragmentBodyStartRegexString = `(?m)(.|\n)*?{`
+	fragmentBodyEndRegexString   = `(?m)}(\s|\n)*\z`
 
-var queryStartRegex = regexp.MustCompile(`(?m)\A(.|\n)*?{`)
-var queryEndRegex = regexp.MustCompile(`(?m)}(\s|\n)*\z`)
+	queryStartRegexString = `(?m)\A(.|\n)*?{`
+	queryEndRegexString   = `(?m)}(\s|\n)*\z`
 
-var levelUpRegex = regexp.MustCompile(`{`)
-var levelDownRegex = regexp.MustCompile(`}`)
+	levelUpRegexString   = `{`
+	levelDownRegexString = `}`
+)
+
+var (
+	schemaRegex = regexp.MustCompile(schemaRegexString)
+
+	paramsRegex = regexp.MustCompile(paramsRegexString)
+	commasRegex = regexp.MustCompile(commasRegexString)
+	aliasRegex  = regexp.MustCompile(aliasRegexString)
+	spacesRegex = regexp.MustCompile(spacesRegexString)
+
+	fragmentsRegex = regexp.MustCompile(fragmentsRegexString)
+
+	fragmentNameStartRegex = regexp.MustCompile(fragmentNameStartRegexString)
+	fragmentNameEndRegex   = regexp.MustCompile(fragmentNameEndRegexString)
+	fragmentBodyStartRegex = regexp.MustCompile(fragmentBodyStartRegexString)
+	fragmentBodyEndRegex   = regexp.MustCompile(fragmentBodyEndRegexString)
+
+	queryStartRegex = regexp.MustCompile(queryStartRegexString)
+	queryEndRegex   = regexp.MustCompile(queryEndRegexString)
+
+	levelUpRegex   = regexp.MustCompile(levelUpRegexString)
+	levelDownRegex = regexp.MustCompile(levelDownRegexString)
+)
