@@ -13,8 +13,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - go test -v ./...
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
