@@ -20,15 +20,15 @@ query {
 `
 
 type QueryResolver struct {
-	Field Field `name:"query"`
+	Field Field `graphql:"query"`
 }
 
 type SearchResolver struct {
-	Field Field `name:"search"`
+	Field Field `graphql:"search"`
 }
 
 type ProductsResolver struct {
-	Field Field `name:"products"`
+	Field Field `graphql:"products"`
 }
 
 func TestRequestedFieldsForProducts(t *testing.T) {
@@ -69,7 +69,7 @@ var graphql_query_user string = `
 `
 
 type UserResolver struct {
-	Field Field `name:"user"`
+	Field Field `graphql:"user"`
 }
 
 func TestRequestedFieldsForUser(t *testing.T) {

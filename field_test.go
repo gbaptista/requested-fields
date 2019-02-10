@@ -6,19 +6,19 @@ import (
 )
 
 type ResolverA struct {
-	Field Field `name:"a"`
+	Field Field `graphql:"a"`
 }
 
 type ResolverB struct {
-	Field Field `name:"b"`
+	Field Field `graphql:"b"`
 }
 
 type ResolverC struct {
-	Field Field `name:"c"`
+	Field Field `graphql:"c"`
 }
 
 type ResolverD struct {
-	Field Field `name:"d"`
+	Field Field `graphql:"d"`
 }
 
 func TestField(t *testing.T) {

@@ -44,7 +44,7 @@ func nameFromResolver(resolver interface{}) string {
 		fieldType, _ := reflect.TypeOf(
 			resolver).Elem().FieldByName("Field")
 
-		fieldName = fieldType.Tag.Get("name")
+		fieldName = fieldType.Tag.Get("graphql")
 	}
 
 	return fieldName
