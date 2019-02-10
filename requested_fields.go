@@ -12,7 +12,7 @@ func RequestedFor(ctx context.Context, resolver interface{}) []string {
 
 // RequestedForAt returns all requested fields for
 //some path from a reference Resolver.
-func RequestedForAt(ctx context.Context, resolver interface{}, path_to_append string) []string {
+func RequestedForAt(ctx context.Context, resolver interface{}, pathToAppend string) []string {
 	tree := ctx.Value("graphqlRequestTree").(map[string][]string)
 
 	name := nameFromResolver(resolver)
@@ -25,8 +25,8 @@ func RequestedForAt(ctx context.Context, resolver interface{}, path_to_append st
 
 	pathTree := strings.Join(path, ".")
 
-	if path_to_append != "" {
-		pathTree += "." + path_to_append
+	if pathToAppend != "" {
+		pathTree += "." + pathToAppend
 	}
 
 	return tree[pathTree]

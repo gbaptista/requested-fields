@@ -29,7 +29,7 @@ func BuildTree(request string) map[string][]string {
 		return tree
 	}
 
-	request = applyFragments(request, extractFragments(request))
+	request = applyFragments(request, extractAndGroupFragments(request))
 	request = removeFragments(request)
 	request = removeParams(request)
 	request = removeCommas(request)
@@ -96,7 +96,7 @@ func extractFragmentBody(fragment string) string {
 	return fragmentBodyEndRegex.ReplaceAllString(fragmentBody, "")
 }
 
-func extractFragments(request string) map[string]string {
+func extractAndGroupFragments(request string) map[string]string {
 	var fragments = make(map[string]string)
 
 	for _, fragment := range fragmentsRegex.FindAllString(request, -1) {
