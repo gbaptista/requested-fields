@@ -13,7 +13,7 @@ A simple library to extract requested fields from a GraphQL request. Supports fr
 
 ## Quick guide
 
-```
+```go
 import (
 	fields "github.com/gbaptista/requested-fields"
 )
