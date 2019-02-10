@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-// Field type to be used in Resolvers
+// Field type to be used in Resolvers.
 type Field struct {
 	CustomName string
 	Depth      int
