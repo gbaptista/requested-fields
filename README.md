@@ -5,7 +5,7 @@ A simple library to extract requested fields from a GraphQL request. Supports fr
 - [Quick guide](#quick-guide)
   - [Query Tree](#query-tree)
   - [Resolvers Field](#resolvers-field)
-  - [Query Tree](#requested-fields)
+  - [Requested Fields](#requested-fields)
   - [Accessing Fields on Deeper Levels](#accessing-fields-on-deeper-levels)
   - [Custom Names](#custom-names)
 - [Complete Demo with Real Requests](#complete-demo-with-real-requests)
@@ -119,7 +119,7 @@ When aliases for the same resource are used at the same level:
 }
 ```
 
-The requested fields will be the sum of the fields of all equal resources at the same level:
+The requested fields will be the fields of all equal resources at the same level:
 ```golang
 []string{"id", "name", "age"}
 ```
