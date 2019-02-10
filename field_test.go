@@ -6,19 +6,19 @@ import (
 )
 
 type ResolverA struct {
-	Field Field `a`
+	Field Field `name:"a"`
 }
 
 type ResolverB struct {
-	Field Field `b`
+	Field Field `name:"b"`
 }
 
 type ResolverC struct {
-	Field Field `c`
+	Field Field `name:"c"`
 }
 
 type ResolverD struct {
-	Field Field `d`
+	Field Field `name:"d"`
 }
 
 func TestField(t *testing.T) {

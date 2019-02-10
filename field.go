@@ -1,7 +1,6 @@
 package fields
 
 import (
-	"fmt"
 	"reflect"
 )
 
@@ -45,7 +44,7 @@ func nameFromResolver(resolver interface{}) string {
 		fieldType, _ := reflect.TypeOf(
 			resolver).Elem().FieldByName("Field")
 
-		fieldName = fmt.Sprintf("%s", fieldType.Tag)
+		fieldName = fieldType.Tag.Get("name")
 	}
 
 	return fieldName
