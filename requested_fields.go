@@ -16,13 +16,13 @@ func RequestedForAt(ctx context.Context, resolver interface{}, path_to_append st
 	// Remove the first "query" path
 	_, path = path[0], path[1:]
 
-	path_tree := strings.Join(path, ".")
+	pathTree := strings.Join(path, ".")
 
 	if path_to_append != "" {
-		path_tree += "." + path_to_append
+		pathTree += "." + path_to_append
 	}
 
-	return tree[path_tree]
+	return tree[pathTree]
 }
 
 func RequestedFor(ctx context.Context, resolver interface{}) []string {

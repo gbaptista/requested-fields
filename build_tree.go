@@ -19,11 +19,11 @@ func BuildTree(request string) map[string][]string {
 	request = removeAlias(request)
 	request = removeQuery(request)
 
-	current_level := 0
+	currentLevel := 0
 
-	var current_tree []string
+	var currentTree []string
 
-	var last_field string
+	var lastField string
 
 	for _, line := range strings.Split(strings.TrimSuffix(request, "\n"), "\n") {
 		field := levelUpRegex.ReplaceAllString(line, "")
@@ -31,19 +31,19 @@ func BuildTree(request string) map[string][]string {
 		field = strings.TrimSpace(field)
 
 		if field != "" {
-			last_field = field
+			lastField = field
 
-			path := strings.Join(current_tree, ".")
+			path := strings.Join(currentTree, ".")
 
 			tree[path] = append(tree[path], field)
 		}
 
 		if levelUpRegex.MatchString(line) {
-			current_tree = append(current_tree, last_field)
-			current_level += 1
+			currentTree = append(currentTree, lastField)
+			currentLevel++
 		} else if levelDownRegex.MatchString(line) {
-			current_tree = current_tree[:len(current_tree)-1]
-			current_level -= 1
+			currentTree = currentTree[:len(currentTree)-1]
+			currentLevel--
 		}
 	}
 
@@ -67,15 +67,15 @@ func normalizeSpaces(request string) string {
 }
 
 func extractFragmentName(fragment string) string {
-	fragment_name := fragmentNameStartRegex.ReplaceAllString(fragment, "")
+	fragmentName := fragmentNameStartRegex.ReplaceAllString(fragment, "")
 
-	return "..." + fragmentNameEndRegex.ReplaceAllString(fragment_name, "")
+	return "..." + fragmentNameEndRegex.ReplaceAllString(fragmentName, "")
 }
 
 func extractFragmentBody(fragment string) string {
-	fragment_body := fragmentBodyStartRegex.ReplaceAllString(fragment, "")
+	fragmentBody := fragmentBodyStartRegex.ReplaceAllString(fragment, "")
 
-	return fragmentBodyEndRegex.ReplaceAllString(fragment_body, "")
+	return fragmentBodyEndRegex.ReplaceAllString(fragmentBody, "")
 }
 
 func extractFragments(request string) map[string]string {
