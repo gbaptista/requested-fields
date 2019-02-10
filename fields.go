@@ -4,4 +4,5 @@ package fields
 
 type key int
 
+// ContextKey type to be used in Context for Request Tree.
 const ContextKey key = iota
