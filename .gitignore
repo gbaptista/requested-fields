@@ -1,4 +1,6 @@
 Gopkg.toml
 Gopkg.lock
 
+coverage.txt
+
 /vendor
