@@ -1,7 +1,6 @@
 package fields
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 )
@@ -39,8 +38,6 @@ func BuildTree(request string) map[string][]string {
 	request = removeAlias(request)
 	request = removeQuery(request)
 
-	fmt.Printf("\nrequest: \"%s\"", request)
-
 	currentLevel := 0
 
 	var currentTree []string
@@ -61,20 +58,11 @@ func BuildTree(request string) map[string][]string {
 		}
 
 		if levelUpRegex.MatchString(line) {
-			currentTree = appendIfMissing(currentTree, lastField)
+			currentTree = append(currentTree, lastField)
 			currentLevel++
-
-			fmt.Printf("\n{levelUp}   currentTree(%d) > %s \"%s\"",
-				currentLevel, currentTree, line)
 		} else if levelDownRegex.MatchString(line) {
 			currentTree = currentTree[:len(currentTree)-1]
 			currentLevel--
-
-			fmt.Printf("\n{levelDown} currentTree(%d) > %s \"%s\"",
-				len(currentTree)-1, currentTree, line)
-		} else {
-			fmt.Printf("\n{sameLevel} currentTree(%d) > %s \"%s\"",
-				currentLevel, currentTree, line)
 		}
 	}
 
@@ -163,10 +151,10 @@ func removeQuery(request string) string {
 }
 
 func appendIfMissing(tree []string, fieldToAppend string) []string {
-	// for _, field := range tree {
-	// 	if field == fieldToAppend {
-	// 		return tree
-	// 	}
-	// }
+	for _, field := range tree {
+		if field == fieldToAppend {
+			return tree
+		}
+	}
 	return append(tree, fieldToAppend)
 }
