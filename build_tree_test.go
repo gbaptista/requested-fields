@@ -125,6 +125,27 @@ var graphql_query_e string = `
   }
 }`
 
+var graphql_query_f string = `{
+  users {
+    users {
+      users {
+        name
+      }
+    }
+  }
+}`
+
+var graphql_query_g string = `
+{
+  ...Frag
+}
+
+fragment Frag on SomeType {
+  field {
+    sub_field
+  }
+}`
+
 func TestBuildTree(t *testing.T) {
 	expected_tree_a := map[string][]string{
 		"":                                     []string{"search", "search_users"},
@@ -141,6 +162,8 @@ func TestBuildTree(t *testing.T) {
 	}
 
 	generated_tree_a := BuildTree(graphql_query_a)
+
+	assert.Equal(t, expected_tree_a[""], generated_tree_a[""])
 
 	assert.Equal(t, expected_tree_a, generated_tree_a)
 
@@ -178,4 +201,22 @@ func TestBuildTree(t *testing.T) {
 	generated_tree_e := BuildTree(graphql_query_e)
 
 	assert.Equal(t, expected_tree_e, generated_tree_e)
+
+	expected_tree_f := map[string][]string{
+		"":                  []string{"users"},
+		"users":             []string{"users"},
+		"users.users":       []string{"users"},
+		"users.users.users": []string{"name"}}
+
+	generated_tree_f := BuildTree(graphql_query_f)
+
+	assert.Equal(t, expected_tree_f, generated_tree_f)
+
+	expected_tree_g := map[string][]string{
+		"":      []string{"field"},
+		"field": []string{"sub_field"}}
+
+	generated_tree_g := BuildTree(graphql_query_g)
+
+	assert.Equal(t, expected_tree_g, generated_tree_g)
 }
