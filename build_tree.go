@@ -118,11 +118,11 @@ func extractAndGroupFragments(request string) map[string]string {
 			}
 		}
 
-		fragmet_text := request[fragmentResult[0] : currentIndex+1]
+		fragmetText := request[fragmentResult[0] : currentIndex+1]
 
-		fragmentName := extractFragmentName(fragmet_text)
+		fragmentName := extractFragmentName(fragmetText)
 
-		fragments[fragmentName] = fragmet_text
+		fragments[fragmentName] = fragmetText
 	}
 
 	return fragments
@@ -164,8 +164,8 @@ func applyFragments(request string, fragments map[string]string) string {
 }
 
 func removeFragments(request string, fragments map[string]string) string {
-	for _, fragment_body := range fragments {
-		request = strings.Replace(request, fragment_body, "", -1)
+	for _, fragmentText := range fragments {
+		request = strings.Replace(request, fragmentText, "", -1)
 	}
 
 	return request
