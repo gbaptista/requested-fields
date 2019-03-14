@@ -31,7 +31,7 @@ func BuildTree(request string) map[string][]string {
 	}
 
 	request = applyFragments(request, extractAndGroupFragments(request))
-	request = removeFragments(request)
+	request = removeFragments(request, extractAndGroupFragments(request))
 	request = removeParams(request)
 	request = removeCommas(request)
 	request = normalizeSpaces(request)
@@ -94,14 +94,35 @@ func extractFragmentName(fragment string) string {
 func extractFragmentBody(fragment string) string {
 	fragmentBody := fragmentBodyStartRegex.ReplaceAllString(fragment, "")
 
-	return fragmentBodyEndRegex.ReplaceAllString(fragmentBody, "")
+	fragmentBody = fragmentBodyEndRegex.ReplaceAllString(fragmentBody, "")
+
+	return fragmentBody
 }
 
 func extractAndGroupFragments(request string) map[string]string {
 	var fragments = make(map[string]string)
 
-	for _, fragment := range fragmentsRegex.FindAllString(request, -1) {
-		fragments[extractFragmentName(fragment)] = extractFragmentBody(fragment)
+	for _, fragmentResult := range fragmentsStartRegex.FindAllStringIndex(request, -1) {
+		openedLevels := 1
+		closedLevels := 0
+
+		currentIndex := fragmentResult[1]
+
+		for openedLevels > closedLevels {
+			currentIndex++
+
+			if string(request[currentIndex]) == "}" {
+				closedLevels++
+			} else if string(request[currentIndex]) == "{" {
+				openedLevels++
+			}
+		}
+
+		fragmet_text := request[fragmentResult[0] : currentIndex+1]
+
+		fragmentName := extractFragmentName(fragmet_text)
+
+		fragments[fragmentName] = fragmet_text
 	}
 
 	return fragments
@@ -125,7 +146,8 @@ func applyFragments(request string, fragments map[string]string) string {
 	for continueApplying {
 		if partialFragmentRegex.MatchString(request) {
 			for _, name := range sortedFragments {
-				request = strings.Replace(request, name, fragments[name], -1)
+				request = strings.Replace(
+					request, name, extractFragmentBody(fragments[name]), -1)
 			}
 
 			replacedFragments++
@@ -141,8 +163,12 @@ func applyFragments(request string, fragments map[string]string) string {
 	return request
 }
 
-func removeFragments(request string) string {
-	return fragmentsRegex.ReplaceAllString(request, "")
+func removeFragments(request string, fragments map[string]string) string {
+	for _, fragment_body := range fragments {
+		request = strings.Replace(request, fragment_body, "", -1)
+	}
+
+	return request
 }
 
 func removeQuery(request string) string {
