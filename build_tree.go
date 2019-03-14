@@ -94,9 +94,7 @@ func extractFragmentName(fragment string) string {
 func extractFragmentBody(fragment string) string {
 	fragmentBody := fragmentBodyStartRegex.ReplaceAllString(fragment, "")
 
-	fragmentBody = fragmentBodyEndRegex.ReplaceAllString(fragmentBody, "")
-
-	return fragmentBody
+	return fragmentBodyEndRegex.ReplaceAllString(fragmentBody, "")
 }
 
 func extractAndGroupFragments(request string) map[string]string {
