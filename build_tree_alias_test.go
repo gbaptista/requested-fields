@@ -18,8 +18,8 @@ func TestBuildTreeAlias(t *testing.T) {
 		}
 	`
 
-	 expectedTreeA := map[string][]string{
-		"": []string{"search"},
+	expectedTreeA := map[string][]string{
+		"":       []string{"search"},
 		"search": []string{"filters", "connection"}}
 
 	generatedTreeA := BuildTree(graphqlQueryA)
@@ -43,10 +43,10 @@ func TestBuildTreeAlias(t *testing.T) {
 	`
 
 	expectedTreeB := map[string][]string{
-		"": []string{"search", "best", "worst"},
-		"best": []string{"connection"},
+		"":       []string{"search", "best", "worst"},
+		"best":   []string{"connection"},
 		"search": []string{"filters"},
-		"worst": []string{"term"}}
+		"worst":  []string{"term"}}
 
 	generatedTreeB := BuildTreeUsingAliases(graphqlQueryB)
 
@@ -68,9 +68,9 @@ func TestBuildTreeAlias(t *testing.T) {
 	}
 	`
 	expectedTreeC := map[string][]string{
-	    "": []string{"user", "custom_user"},
-	    "user": []string{"id", "custom_name", "birthday"},
-	    "custom_user": []string{"id", "name", "age"}}
+		"":            []string{"user", "custom_user"},
+		"user":        []string{"id", "custom_name", "birthday"},
+		"custom_user": []string{"id", "name", "age"}}
 
 	generatedTreeC := BuildTreeUsingAliases(graphqlQueryC)
 

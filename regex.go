@@ -7,22 +7,22 @@ import (
 const (
 	schemaRegexString = `__schema`
 
-	paramsRegexString = `\(.*?\)`
-	commasRegexString = `,`
-	aliasMergeRegexString  = `.*?:`
-	aliasReplaceRegexString  = `:\s{0,}\w{1,}\b`
-	spacesRegexString = `\s{1,}`
+	paramsRegexString       = `(?sm)\(.*?\)`
+	commasRegexString       = `,`
+	aliasMergeRegexString   = `.*?:`
+	aliasReplaceRegexString = `:\s{0,}\w{1,}\b`
+	spacesRegexString       = `\s{1,}`
 
-	fragmentsStartRegexString  = `(?m)fragment(.|\n)*?{`
+	fragmentsStartRegexString  = `(?sm)fragment(.|\n)*?{`
 	partialFragmentRegexString = `\.\.\.`
 
-	fragmentNameStartRegexString = `(?m)fragment(\s|\n){1,}`
-	fragmentNameEndRegexString   = `(?m)\s{1,}on(.|\n)*`
-	fragmentBodyStartRegexString = `(?m)fragment(.|\n)*?{`
-	fragmentBodyEndRegexString   = `(?m)}(\s|\n)*\z`
+	fragmentNameStartRegexString = `(?sm)fragment(\s|\n){1,}`
+	fragmentNameEndRegexString   = `(?sm)\s{1,}on(.|\n)*`
+	fragmentBodyStartRegexString = `(?sm)fragment(.|\n)*?{`
+	fragmentBodyEndRegexString   = `(?sm)}(\s|\n)*\z`
 
-	queryStartRegexString = `(?m)\A(.|\n)*?{`
-	queryEndRegexString   = `(?m)}(\s|\n)*\z`
+	queryStartRegexString = `(?sm)\A(.|\n)*?{`
+	queryEndRegexString   = `(?sm)}(\s|\n)*\z`
 
 	levelUpRegexString   = `{`
 	levelDownRegexString = `}`
@@ -31,11 +31,11 @@ const (
 var (
 	schemaRegex = regexp.MustCompile(schemaRegexString)
 
-	paramsRegex = regexp.MustCompile(paramsRegexString)
-	commasRegex = regexp.MustCompile(commasRegexString)
-	aliasMergeRegex  = regexp.MustCompile(aliasMergeRegexString)
-	aliasReplaceRegex  = regexp.MustCompile(aliasReplaceRegexString)
-	spacesRegex = regexp.MustCompile(spacesRegexString)
+	paramsRegex       = regexp.MustCompile(paramsRegexString)
+	commasRegex       = regexp.MustCompile(commasRegexString)
+	aliasMergeRegex   = regexp.MustCompile(aliasMergeRegexString)
+	aliasReplaceRegex = regexp.MustCompile(aliasReplaceRegexString)
+	spacesRegex       = regexp.MustCompile(spacesRegexString)
 
 	fragmentsStartRegex  = regexp.MustCompile(fragmentsStartRegexString)
 	partialFragmentRegex = regexp.MustCompile(partialFragmentRegexString)
