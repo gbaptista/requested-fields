@@ -58,38 +58,38 @@ func TestBuildTree(t *testing.T) {
 		  name
 		} `
 
-		// search {
-		//   term
-		//   products {
-		//     edges {
-		//       node {
-		//         id
-		//         title
-		//         seller {
-		//           id
-		//           name
-		//         }
-		//       }
-		//       cursor
-		//     }
-		//   }
-		// }
-		// search_users {
-		//   term
-		//   users {
-		//     edges {
-		//       node {
-		//         id
-		//         title
-		//         seller {
-		//           id
-		//           name
-		//         }
-		//       }
-		//       cursor
-		//     }
-		//   }
-		// }
+	// search {
+	//   term
+	//   products {
+	//     edges {
+	//       node {
+	//         id
+	//         title
+	//         seller {
+	//           id
+	//           name
+	//         }
+	//       }
+	//       cursor
+	//     }
+	//   }
+	// }
+	// search_users {
+	//   term
+	//   users {
+	//     edges {
+	//       node {
+	//         id
+	//         title
+	//         seller {
+	//           id
+	//           name
+	//         }
+	//       }
+	//       cursor
+	//     }
+	//   }
+	// }
 
 	var graphqlQueryB string = `
 		query {
@@ -219,4 +219,49 @@ func TestBuildTree(t *testing.T) {
 	generatedTreeG := BuildTree(graphqlQueryG)
 
 	assert.Equal(t, expectedTreeG, generatedTreeG)
+
+	var graphqlQueryH string = `
+		query (
+		  $product_id: ID!,
+		  $first: Int!
+		){
+		  product(id: $product_id) {
+		    id
+		  }
+
+		  search(products: $search) {
+		    term
+		  }
+
+		  other_a: search(products: $search) {
+		    products(
+		      first: $first,
+		      sort: $sort,
+		    ) {
+		      total
+		    }
+		  }
+
+		  other_b: search(products: $search) {
+		    products(
+		      first: $first,
+		      sort: $sort
+		    ) {
+		      total
+		    }
+		  }
+		}
+	`
+	expectedTreeH := map[string][]string{
+		"":                 []string{"product", "search", "other_a", "other_b"},
+		"other_a":          []string{"products"},
+		"other_a.products": []string{"total"},
+		"other_b":          []string{"products"},
+		"other_b.products": []string{"total"},
+		"product":          []string{"id"},
+		"search":           []string{"term"}}
+
+	generatedTreeH := BuildTreeUsingAliases(graphqlQueryH)
+
+	assert.Equal(t, expectedTreeH, generatedTreeH)
 }
