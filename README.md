@@ -126,7 +126,7 @@ The requested fields will be the fields of all equal resources at the same level
 []string{"id", "name", "birthday", "age"}
 ```
 
-an alternative to this behavior is to use the `BuildTreeUsingAliases` function:
+An alternative to this behavior is to use the `BuildTreeUsingAliases` function:
 
 ### BuildTreeUsingAliases
 
