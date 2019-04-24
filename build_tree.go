@@ -24,6 +24,14 @@ and returns a map with requested fields for each field.
 		}
 */
 func BuildTree(request string) map[string][]string {
+	return buildTreeWithAliasStrategy(request, "merge")
+}
+
+func BuildTreeUsingAliases(request string) map[string][]string {
+	return buildTreeWithAliasStrategy(request, "replace")
+}
+
+func buildTreeWithAliasStrategy(request string, aliasStrategy string) map[string][]string {
 	tree := make(map[string][]string)
 
 	if schemaRegex.MatchString(request) {
@@ -35,7 +43,7 @@ func BuildTree(request string) map[string][]string {
 	request = removeParams(request)
 	request = removeCommas(request)
 	request = normalizeSpaces(request)
-	request = removeAlias(request)
+	request = normalizeAlias(request, aliasStrategy)
 	request = removeQuery(request)
 
 	currentLevel := 0
@@ -77,8 +85,16 @@ func removeCommas(request string) string {
 	return commasRegex.ReplaceAllString(request, "\n")
 }
 
-func removeAlias(request string) string {
-	return aliasRegex.ReplaceAllString(request, "\n")
+func normalizeAlias(request string, strategy string) string {
+	if strategy == "merge" {
+		return aliasMergeRegex.ReplaceAllString(request, "\n")
+	}
+
+	if strategy == "replace" {
+		return aliasReplaceRegex.ReplaceAllString(request, "\n")
+	}
+
+	return request
 }
 
 func normalizeSpaces(request string) string {

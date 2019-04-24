@@ -10,6 +10,7 @@ A simple library to extract requested fields from a GraphQL request. Supports fr
   - [Custom Names](#custom-names)
 - [Complete Demo with Real Requests](#complete-demo-with-real-requests)
 - [Known Issues](#known-issues)
+  - [BuildTreeUsingAliases](#BuildTreeUsingAliases)
 
 ## Quick Guide
 
@@ -123,4 +124,32 @@ When aliases for the same resource are used at the same level:
 The requested fields will be the fields of all equal resources at the same level:
 ```golang
 []string{"id", "name", "birthday", "age"}
+```
+
+an alternative to this behavior is to use the `BuildTreeUsingAliases` function:
+
+### BuildTreeUsingAliases
+
+```graphql
+{
+  user(id: 3) {
+    id
+    custom_name: name
+    birthday
+  }
+
+  custom_user: user(id: 4) {
+    id
+    name
+    age
+  }
+}
+```
+
+The requested fields will be:
+```golang
+map[string][]string{
+    "": []string{"user", "custom_user"},
+    "user": []string{"id", "custom_name", "birthday"},
+    "custom_user": []string{"id", "name", "age"}}
 ```

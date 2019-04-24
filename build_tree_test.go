@@ -5,149 +5,149 @@ import (
 	"testing"
 )
 
-var graphql_query_a string = `
-
-query productsSearch(
-
-  $products_search: ProductsSearchInput!) {
-
-  search(products: $products_search)
-
-
-  {
-    term
-    products {
-      edges {
-        node {
-          id           custom_title: title
-          seller {
-            ...SellerData
-          }
-        }
-        cursor
-      }
-    }
-  }
-
-  search_users {
-    term
-    users {
-      edges {
-        node {
-          id           custom_title: title
-          seller {...SellerData}
-        }
-        cursor
-      }
-    }
-  }
-}
-
-fragment SellerData on User {
-  id, ...SellerDataB
-} 
-
-fragment
-
-SellerDataB
-
-on
-
-  User {
-  name
-} `
-
-// search {
-//   term
-//   products {
-//     edges {
-//       node {
-//         id
-//         title
-//         seller {
-//           id
-//           name
-//         }
-//       }
-//       cursor
-//     }
-//   }
-// }
-// search_users {
-//   term
-//   users {
-//     edges {
-//       node {
-//         id
-//         title
-//         seller {
-//           id
-//           name
-//         }
-//       }
-//       cursor
-//     }
-//   }
-// }
-
-var graphql_query_b string = `
-query {
-  users {
-    id
-    title
-  }
-}`
-
-var graphql_query_c string = `
-query {
-  hello
-}`
-
-var graphql_query_d string = `
-{
-  user(id: 3) {
-    id
-    name
-  }
-}`
-
-var graphql_query_e string = `
-{
-  user(id: 3) {
-    id
-    name
-  }
-
-  custom_user: user(id: 4) {
-    id
-    name
-    age
-  }
-}`
-
-var graphql_query_f string = `{
-  users {
-    users {
-      users {
-        name
-      }
-    }
-  }
-}`
-
-var graphql_query_g string = `
-{
-  ...Frag
-}
-
-fragment Frag on SomeType {
-  field {
-    sub_field
-  }
-}`
-
 func TestBuildTree(t *testing.T) {
-	expected_tree_a := map[string][]string{
+	var graphqlQueryA string = `
+
+		query productsSearch(
+
+		  $products_search: ProductsSearchInput!) {
+
+		  search(products: $products_search)
+
+
+		  {
+		    term
+		    products {
+		      edges {
+		        node {
+		          id           custom_title: title
+		          seller {
+		            ...SellerData
+		          }
+		        }
+		        cursor
+		      }
+		    }
+		  }
+
+		  search_users {
+		    term
+		    users {
+		      edges {
+		        node {
+		          id           custom_title: title
+		          seller {...SellerData}
+		        }
+		        cursor
+		      }
+		    }
+		  }
+		}
+
+		fragment SellerData on User {
+		  id, ...SellerDataB
+		} 
+
+		fragment
+
+		SellerDataB
+
+		on
+
+		  User {
+		  name
+		} `
+
+		// search {
+		//   term
+		//   products {
+		//     edges {
+		//       node {
+		//         id
+		//         title
+		//         seller {
+		//           id
+		//           name
+		//         }
+		//       }
+		//       cursor
+		//     }
+		//   }
+		// }
+		// search_users {
+		//   term
+		//   users {
+		//     edges {
+		//       node {
+		//         id
+		//         title
+		//         seller {
+		//           id
+		//           name
+		//         }
+		//       }
+		//       cursor
+		//     }
+		//   }
+		// }
+
+	var graphqlQueryB string = `
+		query {
+		  users {
+		    id
+		    title
+		  }
+		}`
+
+	var graphqlQueryC string = `
+		query {
+		  hello
+		}`
+
+	var graphqlQueryD string = `
+		{
+		  user(id: 3) {
+		    id
+		    name
+		  }
+		}`
+
+	var graphqlQueryE string = `
+		{
+		  user(id: 3) {
+		    id
+		    name
+		  }
+
+		  custom_user: user(id: 4) {
+		    id
+		    name
+		    age
+		  }
+		}`
+
+	var graphqlQueryF string = `{
+		  users {
+		    users {
+		      users {
+		        name
+		      }
+		    }
+		  }
+		}`
+
+	var graphqlQueryG string = `
+		{
+		  ...Frag
+		}
+
+		fragment Frag on SomeType {
+		  field {
+		    sub_field
+		  }
+		}`
+
+	expectedTreeA := map[string][]string{
 		"":                                     []string{"search", "search_users"},
 		"search":                               []string{"term", "products"},
 		"search.products":                      []string{"edges"},
@@ -161,62 +161,62 @@ func TestBuildTree(t *testing.T) {
 		"search_users.users.edges.node.seller": []string{"id", "name"},
 	}
 
-	generated_tree_a := BuildTree(graphql_query_a)
+	generatedTreeA := BuildTree(graphqlQueryA)
 
-	assert.Equal(t, expected_tree_a[""], generated_tree_a[""])
+	assert.Equal(t, expectedTreeA[""], generatedTreeA[""])
 
-	assert.Equal(t, expected_tree_a, generated_tree_a)
+	assert.Equal(t, expectedTreeA, generatedTreeA)
 
-	expected_tree_b := map[string][]string{
+	expectedTreeB := map[string][]string{
 		"":      []string{"users"},
 		"users": []string{"id", "title"},
 	}
 
-	generated_tree_b := BuildTree(graphql_query_b)
+	generatedTreeB := BuildTree(graphqlQueryB)
 
-	assert.Equal(t, expected_tree_b, generated_tree_b)
+	assert.Equal(t, expectedTreeB, generatedTreeB)
 
-	expected_tree_c := map[string][]string{
+	expectedTreeC := map[string][]string{
 		"": []string{"hello"},
 	}
 
-	generated_tree_c := BuildTree(graphql_query_c)
+	generatedTreeC := BuildTree(graphqlQueryC)
 
-	assert.Equal(t, expected_tree_c, generated_tree_c)
+	assert.Equal(t, expectedTreeC, generatedTreeC)
 
-	expected_tree_d := map[string][]string{
+	expectedTreeD := map[string][]string{
 		"":     []string{"user"},
 		"user": []string{"id", "name"},
 	}
 
-	generated_tree_d := BuildTree(graphql_query_d)
+	generatedTreeD := BuildTree(graphqlQueryD)
 
-	assert.Equal(t, expected_tree_d, generated_tree_d)
+	assert.Equal(t, expectedTreeD, generatedTreeD)
 
-	expected_tree_e := map[string][]string{
+	expectedTreeE := map[string][]string{
 		"":     []string{"user"},
 		"user": []string{"id", "name", "age"},
 	}
 
-	generated_tree_e := BuildTree(graphql_query_e)
+	generatedTreeE := BuildTree(graphqlQueryE)
 
-	assert.Equal(t, expected_tree_e, generated_tree_e)
+	assert.Equal(t, expectedTreeE, generatedTreeE)
 
-	expected_tree_f := map[string][]string{
+	expectedTreeF := map[string][]string{
 		"":                  []string{"users"},
 		"users":             []string{"users"},
 		"users.users":       []string{"users"},
 		"users.users.users": []string{"name"}}
 
-	generated_tree_f := BuildTree(graphql_query_f)
+	generatedTreeF := BuildTree(graphqlQueryF)
 
-	assert.Equal(t, expected_tree_f, generated_tree_f)
+	assert.Equal(t, expectedTreeF, generatedTreeF)
 
-	expected_tree_g := map[string][]string{
+	expectedTreeG := map[string][]string{
 		"":      []string{"field"},
 		"field": []string{"sub_field"}}
 
-	generated_tree_g := BuildTree(graphql_query_g)
+	generatedTreeG := BuildTree(graphqlQueryG)
 
-	assert.Equal(t, expected_tree_g, generated_tree_g)
+	assert.Equal(t, expectedTreeG, generatedTreeG)
 }
