@@ -9,7 +9,8 @@ const (
 
 	paramsRegexString = `\(.*?\)`
 	commasRegexString = `,`
-	aliasRegexString  = `.*?:`
+	aliasMergeRegexString  = `.*?:`
+	aliasReplaceRegexString  = `:\s{0,}\w{1,}\b`
 	spacesRegexString = `\s{1,}`
 
 	fragmentsStartRegexString  = `(?m)fragment(.|\n)*?{`
@@ -32,7 +33,8 @@ var (
 
 	paramsRegex = regexp.MustCompile(paramsRegexString)
 	commasRegex = regexp.MustCompile(commasRegexString)
-	aliasRegex  = regexp.MustCompile(aliasRegexString)
+	aliasMergeRegex  = regexp.MustCompile(aliasMergeRegexString)
+	aliasReplaceRegex  = regexp.MustCompile(aliasReplaceRegexString)
 	spacesRegex = regexp.MustCompile(spacesRegexString)
 
 	fragmentsStartRegex  = regexp.MustCompile(fragmentsStartRegexString)
