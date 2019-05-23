@@ -22,7 +22,7 @@ func TestBuildTreeAlias(t *testing.T) {
 		"":       []string{"search"},
 		"search": []string{"filters", "connection"}}
 
-	generatedTreeA := BuildTree(graphqlQueryA)
+	generatedTreeA := BuildTree(graphqlQueryA, Variables{})
 
 	assert.Equal(t, expectedTreeA, generatedTreeA)
 
@@ -48,7 +48,7 @@ func TestBuildTreeAlias(t *testing.T) {
 		"search": []string{"filters"},
 		"worst":  []string{"term"}}
 
-	generatedTreeB := BuildTreeUsingAliases(graphqlQueryB)
+	generatedTreeB := BuildTreeUsingAliases(graphqlQueryB, Variables{})
 
 	assert.Equal(t, expectedTreeB, generatedTreeB)
 
@@ -72,7 +72,7 @@ func TestBuildTreeAlias(t *testing.T) {
 		"user":        []string{"id", "custom_name", "birthday"},
 		"custom_user": []string{"id", "name", "age"}}
 
-	generatedTreeC := BuildTreeUsingAliases(graphqlQueryC)
+	generatedTreeC := BuildTreeUsingAliases(graphqlQueryC, Variables{})
 
 	assert.Equal(t, expectedTreeC, generatedTreeC)
 }
