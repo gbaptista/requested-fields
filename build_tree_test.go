@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+type Variables map[string]interface{}
+
 func TestBuildTree(t *testing.T) {
 	var graphqlQueryA string = `
 
@@ -161,7 +163,7 @@ func TestBuildTree(t *testing.T) {
 		"search_users.users.edges.node.seller": []string{"id", "name"},
 	}
 
-	generatedTreeA := BuildTree(graphqlQueryA)
+	generatedTreeA := BuildTree(graphqlQueryA, Variables{})
 
 	assert.Equal(t, expectedTreeA[""], generatedTreeA[""])
 
@@ -172,7 +174,7 @@ func TestBuildTree(t *testing.T) {
 		"users": []string{"id", "title"},
 	}
 
-	generatedTreeB := BuildTree(graphqlQueryB)
+	generatedTreeB := BuildTree(graphqlQueryB, Variables{})
 
 	assert.Equal(t, expectedTreeB, generatedTreeB)
 
@@ -180,7 +182,7 @@ func TestBuildTree(t *testing.T) {
 		"": []string{"hello"},
 	}
 
-	generatedTreeC := BuildTree(graphqlQueryC)
+	generatedTreeC := BuildTree(graphqlQueryC, Variables{})
 
 	assert.Equal(t, expectedTreeC, generatedTreeC)
 
@@ -189,7 +191,7 @@ func TestBuildTree(t *testing.T) {
 		"user": []string{"id", "name"},
 	}
 
-	generatedTreeD := BuildTree(graphqlQueryD)
+	generatedTreeD := BuildTree(graphqlQueryD, Variables{})
 
 	assert.Equal(t, expectedTreeD, generatedTreeD)
 
@@ -198,7 +200,7 @@ func TestBuildTree(t *testing.T) {
 		"user": []string{"id", "name", "age"},
 	}
 
-	generatedTreeE := BuildTree(graphqlQueryE)
+	generatedTreeE := BuildTree(graphqlQueryE, Variables{})
 
 	assert.Equal(t, expectedTreeE, generatedTreeE)
 
@@ -208,7 +210,7 @@ func TestBuildTree(t *testing.T) {
 		"users.users":       []string{"users"},
 		"users.users.users": []string{"name"}}
 
-	generatedTreeF := BuildTree(graphqlQueryF)
+	generatedTreeF := BuildTree(graphqlQueryF, Variables{})
 
 	assert.Equal(t, expectedTreeF, generatedTreeF)
 
@@ -216,7 +218,7 @@ func TestBuildTree(t *testing.T) {
 		"":      []string{"field"},
 		"field": []string{"sub_field"}}
 
-	generatedTreeG := BuildTree(graphqlQueryG)
+	generatedTreeG := BuildTree(graphqlQueryG, Variables{})
 
 	assert.Equal(t, expectedTreeG, generatedTreeG)
 
@@ -261,7 +263,174 @@ func TestBuildTree(t *testing.T) {
 		"product":          []string{"id"},
 		"search":           []string{"term"}}
 
-	generatedTreeH := BuildTreeUsingAliases(graphqlQueryH)
+	generatedTreeH := BuildTreeUsingAliases(graphqlQueryH, Variables{})
 
 	assert.Equal(t, expectedTreeH, generatedTreeH)
+
+	// -------------------------------------
+
+	var graphqlQueryI string = `
+		query ProductsSearchPage($include_aggregations: Boolean!) {
+		  search {
+		    aggregations {
+		      departments {
+		        ...departmentAggregationFields
+		        __typename
+		      }
+		    }
+		    some_field
+		  }
+		}
+
+		fragment departmentAggregationFields on DepartmentAggregation {
+		  slug
+		  name
+		  __typename
+		}
+
+	`
+	expectedTreeI := map[string][]string{
+		"":                                []string{"search"},
+		"search":                          []string{"aggregations", "some_field"},
+		"search.aggregations":             []string{"departments"},
+		"search.aggregations.departments": []string{"slug", "name", "__typename"}}
+
+	generatedTreeI := BuildTreeUsingAliases(graphqlQueryI, Variables{})
+
+	assert.Equal(t, expectedTreeI, generatedTreeI)
+
+	// -------------
+
+	var graphqlQueryJ string = `
+		query ProductsSearchPage($include_aggregations: Boolean!) {
+		  search {
+		    aggregations @include(if: true) {
+		      departments {
+		        ...departmentAggregationFields
+		        __typename
+		      }
+		    }
+		    some_field
+		  }
+		}
+
+		fragment departmentAggregationFields on DepartmentAggregation {
+		  slug
+		  name
+		  __typename
+		}
+
+	`
+	expectedTreeJ := map[string][]string{
+		"": []string{"search"},
+		"search": []string{
+			"aggregations", "some_field"},
+		"search.aggregations": []string{"departments"},
+		"search.aggregations.departments": []string{
+			"slug", "name", "__typename"}}
+
+	generatedTreeJ := BuildTreeUsingAliases(graphqlQueryJ, Variables{})
+
+	assert.Equal(t, expectedTreeJ, generatedTreeJ)
+
+	var graphqlQueryK string = `
+		query ProductsSearchPage($include_aggregations: Boolean!) {
+		  search {
+		    aggregations @include(if:false) {
+		      departments {
+		        ...departmentAggregationFields
+		        __typename
+		      }
+		    }
+		    some_field
+		  }
+		}
+
+		fragment departmentAggregationFields on DepartmentAggregation {
+		  slug
+		  name
+		  __typename
+		}
+
+	`
+	expectedTreeK := map[string][]string{
+		"": []string{"search"},
+		"search": []string{
+			"aggregations_FALSE", "some_field"},
+		"search.aggregations_FALSE": []string{"departments"},
+		"search.aggregations_FALSE.departments": []string{
+			"slug", "name", "__typename"}}
+
+	generatedTreeK := BuildTreeUsingAliases(graphqlQueryK, Variables{})
+
+	assert.Equal(t, expectedTreeK, generatedTreeK)
+
+	var graphqlQueryL string = `
+		query ProductsSearchPage($include_aggregations: Boolean!) {
+		  search {
+		    aggregations @include(if: $include_aggregations) {
+		      departments {
+		        ...departmentAggregationFields
+		        __typename
+		      }
+		    }
+		    some_field
+		  }
+		}
+
+		fragment departmentAggregationFields on DepartmentAggregation {
+		  slug
+		  name
+		  __typename
+		}
+
+	`
+	expectedTreeL := map[string][]string{
+		"": []string{"search"},
+		"search": []string{
+			"aggregations_FALSE", "some_field"},
+		"search.aggregations_FALSE": []string{"departments"},
+		"search.aggregations_FALSE.departments": []string{
+			"slug", "name", "__typename"}}
+
+	generatedTreeL := BuildTreeUsingAliases(graphqlQueryL, Variables{
+		"include_aggregations": false})
+
+	assert.Equal(t, expectedTreeL, generatedTreeL)
+
+	var graphqlQueryM string = `
+		query ProductsSearchPage($include_aggregations: Boolean!) {
+		  search {
+		    aggregations @include(if: $include_aggregations) {
+		      departments {
+		        ...departmentAggregationFields
+		        __typename
+		      }
+		    }
+		    lorem @include(if: $blabla) {
+
+		    }
+		    some_field
+		  }
+		}
+
+		fragment departmentAggregationFields on DepartmentAggregation {
+		  slug
+		  name
+		  __typename
+		}
+
+	`
+	expectedTreeM := map[string][]string{
+		"":                    []string{"search"},
+		"search":              []string{"aggregations", "lorem", "some_field"},
+		"search.aggregations": []string{"departments"},
+		"search.aggregations.departments": []string{
+			"slug", "name", "__typename"}}
+
+	generatedTreeM := BuildTreeUsingAliases(graphqlQueryM, Variables{
+		"include_aggregations": true,
+		"blabla":               "lorem"})
+
+	assert.Equal(t, expectedTreeM, generatedTreeM)
 }

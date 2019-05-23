@@ -23,21 +23,23 @@ and returns a map with requested fields for each field.
 			"users": []string{"id", "name"},
 		}
 */
-func BuildTree(request string) map[string][]string {
-	return buildTreeWithAliasStrategy(request, "merge")
+func BuildTree(request string, variables map[string]interface{}) map[string][]string {
+	return buildTreeWithAliasStrategy(request, "merge", variables)
 }
 
-func BuildTreeUsingAliases(request string) map[string][]string {
-	return buildTreeWithAliasStrategy(request, "replace")
+func BuildTreeUsingAliases(request string, variables map[string]interface{}) map[string][]string {
+	return buildTreeWithAliasStrategy(request, "replace", variables)
 }
 
-func buildTreeWithAliasStrategy(request string, aliasStrategy string) map[string][]string {
+func buildTreeWithAliasStrategy(request string, aliasStrategy string, variables map[string]interface{}) map[string][]string {
 	tree := make(map[string][]string)
 
 	if schemaRegex.MatchString(request) {
 		return tree
 	}
 
+	request = applyVariables(request, variables)
+	request = applyIncludes(request)
 	request = applyFragments(request, extractAndGroupFragments(request))
 	request = removeFragments(request, extractAndGroupFragments(request))
 	request = removeParams(request)
@@ -75,6 +77,22 @@ func buildTreeWithAliasStrategy(request string, aliasStrategy string) map[string
 	}
 
 	return tree
+}
+
+func applyVariables(request string, variables map[string]interface{}) string {
+	for name, value := range variables {
+		switch variableValue := value.(type) {
+		case bool:
+			valueToReplace := "false"
+			if variableValue {
+				valueToReplace = "true"
+			}
+			request = strings.Replace(
+				request, "$"+name, valueToReplace, -1)
+		}
+	}
+
+	return request
 }
 
 func removeParams(request string) string {
@@ -183,6 +201,12 @@ func removeFragments(request string, fragments map[string]string) string {
 	}
 
 	return request
+}
+
+func applyIncludes(request string) string {
+	request = trueIncludesRegex.ReplaceAllString(request, " {")
+	request = falseIncludesRegex.ReplaceAllString(request, "_FALSE {")
+	return includesRegex.ReplaceAllString(request, " {")
 }
 
 func removeQuery(request string) string {

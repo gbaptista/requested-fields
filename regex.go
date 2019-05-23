@@ -7,6 +7,10 @@ import (
 const (
 	schemaRegexString = `__schema`
 
+	trueIncludesRegexString  = `\s{1,}@.*true.*?{`
+	falseIncludesRegexString = `\s{1,}@.*false.*?{`
+	includesRegexString      = `\s{1,}@.*?{`
+
 	paramsRegexString       = `(?sm)\(.*?\)`
 	commasRegexString       = `,`
 	aliasMergeRegexString   = `.*?:`
@@ -29,7 +33,10 @@ const (
 )
 
 var (
-	schemaRegex = regexp.MustCompile(schemaRegexString)
+	schemaRegex        = regexp.MustCompile(schemaRegexString)
+	trueIncludesRegex  = regexp.MustCompile(trueIncludesRegexString)
+	falseIncludesRegex = regexp.MustCompile(falseIncludesRegexString)
+	includesRegex      = regexp.MustCompile(includesRegexString)
 
 	paramsRegex       = regexp.MustCompile(paramsRegexString)
 	commasRegex       = regexp.MustCompile(commasRegexString)
