@@ -31,3 +31,27 @@ func RequestedForAt(ctx context.Context, resolver interface{}, pathToAppend stri
 
 	return tree[pathTree]
 }
+
+// RequestedForContaining returns all requested fields for
+//some path from a reference Resolver.
+func RequestedForContaining(ctx context.Context, resolverString string) []string {
+	tree := ctx.Value(ContextKey).(map[string][]string)
+
+	var src = make(map[string]interface{})
+	for key, value := range tree {
+		if strings.Contains(key, resolverString) {
+			for _, val := range value {
+				src[val] = nil
+			}
+		}
+	}
+
+	var i = 0
+	var srcList = make([]string, len(src))
+	for k := range src {
+		srcList[i] = k
+		i = i + 1
+	}
+
+	return srcList
+}

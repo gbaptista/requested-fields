@@ -2,8 +2,10 @@ package fields
 
 import (
 	"context"
-	"github.com/stretchr/testify/assert"
+	"sort"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var graphql_query_products string = `
@@ -83,6 +85,38 @@ func TestRequestedFieldsForUser(t *testing.T) {
 
 	expected_fields := []string{"id", "name"}
 	requested_fields := RequestedFor(ctx, user_resolver)
+
+	assert.Equal(t, expected_fields, requested_fields)
+}
+
+var graphql_query_user_nested string = `
+{
+  user(id: 3) {
+    id
+    name
+    user {
+        id
+        age
+        height
+    }
+  }
+}
+`
+
+func TestRequestedFieldsForContainingUser(t *testing.T) {
+	query_resolver := &QueryResolver{}
+
+	user_resolver := &UserResolver{}
+	user_resolver.Field.SetParent(query_resolver)
+
+	ctx := context.WithValue(context.Background(),
+		ContextKey, BuildTree(graphql_query_user_nested, Variables{}))
+
+	expected_fields := []string{"id", "name", "age", "height", "user"}
+	requested_fields := RequestedForContaining(ctx, "user")
+
+	sort.Slice(expected_fields, func(i, j int) bool { return expected_fields[i] < expected_fields[j] })
+	sort.Slice(requested_fields, func(i, j int) bool { return requested_fields[i] < requested_fields[j] })
 
 	assert.Equal(t, expected_fields, requested_fields)
 }
