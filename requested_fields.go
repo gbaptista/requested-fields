@@ -26,7 +26,11 @@ func RequestedForAt(ctx context.Context, resolver interface{}, pathToAppend stri
 	pathTree := strings.Join(path, ".")
 
 	if pathToAppend != "" {
-		pathTree += "." + pathToAppend
+		if pathTree == "" {
+			pathTree = pathToAppend
+		} else {
+			pathTree += "." + pathToAppend
+		}
 	}
 
 	return tree[pathTree]
